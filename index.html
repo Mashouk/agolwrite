@@ -35,10 +35,26 @@
 
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
+
+
+      const popupTemplate = {
+          title: "{Name}",
+          content: "{Description}"
+      }
+      const attributes = {
+          Name: "Stevie Ray Vaughan Statue",
+          Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
+      }
+
+
+
+
       const point = { //Create a point  
         type: "point",  
         longitude: -97.750689,    //long lat of Stevie Ray Vaughan Statue
-        latitude: 30.263098
+        latitude: 30.263098,
+        attributes: attributes,
+        popupTemplate: popupTemplate
       };
 
       const simpleMarkerSymbol = {  
@@ -58,6 +74,7 @@
 
 
       graphicsLayer.add(pointGraphic);
+
 
 
 
