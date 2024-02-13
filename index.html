@@ -16,10 +16,12 @@
     require([
      "esri/config",
       "esri/Map",
-      "esri/views/MapView"
+      "esri/views/MapView",
       "esri/Graphic",  
-      "esri/layers/GraphicsLayer" 
-    ], function (esriConfig,Map, MapView, Graphic, GraphicsLayer) {
+      "esri/layers/GraphicsLayer",
+      //adding in the module for the feature layers
+      "esri/layers/FeatureLayer"
+    ], function (esriConfig,Map, MapView, Graphic, GraphicsLayer,FeatureLayer) {
 
       esriConfig.apiKey = "AAPK9c576cbd3a844e7791c0d5901d6d1b876W9Kwr0mfce5WFBsw3WmfabQ1sD8IBrqASyYAbSi22UUfDN4txoxY5y-bIM1jVhR";
       const map = new Map({
@@ -33,51 +35,68 @@
           container: "viewDiv" // Div element
         });
 
-      const graphicsLayer = new GraphicsLayer();  
-      map.add(graphicsLayer);
+        // Create a GraphicsLayer
+        const graphicsLayer = new GraphicsLayer(); // Create a new graphics layer
+        map.add(graphicsLayer); // Add it to the map
+
+        const popupTemplate = {
+            title: "{Name}",
+            content: "{Description}"
+        };
+
+        const attributes = {
+            Name: "Stevie Ray Vaughan Statue",
+            Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
+        };
+
+        const point = { //Create a point  
+          type: "point",  
+          longitude: -97.750689,    //long lat of Stevie Ray Vaughan Statue
+          latitude: 30.263098
+
+        };
+
+        const simpleMarkerSymbol = {  
+          type: "simple-marker",  
+          color: [0, 0, 139],  // Color of blues rock
+          outline: {  
+            color: [255, 255, 255], // White  
+            width: 1
+          }  
+        };
+
+        const pointGraphic = new Graphic({  
+          geometry: point,  
+          symbol: simpleMarkerSymbol,
+          attributes: attributes,
+          popupTemplate: popupTemplate  
+        });
+
+        graphicsLayer.add(pointGraphic); // Add the point graphic to the graphics layer
 
 
-      const popupTemplate = {
-          title: "{Name}",
-          content: "{Description}"
-      }
-      const attributes = {
-          Name: "Stevie Ray Vaughan Statue",
-          Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
-      }
+        // Define a pop-up for usaeduLayer
+        const popupEduusa = {
+          "title": "EDUs",
+          "content": "<b>Name:</b> {INSTNM}<br><b>Total Enrollment:</b> {INSTSIZE}<br>"
+        }
 
 
+        const usaeduLayer = new FeatureLayer({
+          
+          url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
+          
+          //adding the popup here
+          outFields: ["INSTNM","INSTSIZE"],
+          popupTemplate: popupEduusa
 
+          
 
-      const point = { //Create a point  
-        type: "point",  
-        longitude: -97.750689,    //long lat of Stevie Ray Vaughan Statue
-        latitude: 30.263098,
-        attributes: attributes,
-        popupTemplate: popupTemplate
-      };
-
-      const simpleMarkerSymbol = {  
-        type: "simple-marker",  
-        color: [0, 0, 139],  // Color of blues rock
-        outline: {  
-          color: [255, 255, 255], // White  
-          width: 1
-        }  
-      };
-
-
-      const pointGraphic = new Graphic({  
-        geometry: point,  
-        symbol: simpleMarkerSymbol  
-      });
-
-
-      graphicsLayer.add(pointGraphic);
-
-
-
-
+          }); 
+        
+        
+        
+        map.add(usaeduLayer);
 
     });
   </script>
