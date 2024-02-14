@@ -20,8 +20,13 @@
       "esri/Graphic",  
       "esri/layers/GraphicsLayer",
       //adding in the module for the feature layers
-      "esri/layers/FeatureLayer"
-    ], function (esriConfig,Map, MapView, Graphic, GraphicsLayer,FeatureLayer) {
+      "esri/layers/FeatureLayer",
+      "esri/geometry/Polyline",
+      "esri/geometry/Polygon",
+      "esri/symbols/SimpleFillSymbol",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/symbols/SimpleMarkerSymbol"
+    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Polyline, Polygon, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol) {
 
       esriConfig.apiKey = "AAPK9c576cbd3a844e7791c0d5901d6d1b876W9Kwr0mfce5WFBsw3WmfabQ1sD8IBrqASyYAbSi22UUfDN4txoxY5y-bIM1jVhR";
       const map = new Map({
@@ -39,63 +44,118 @@
         const graphicsLayer = new GraphicsLayer(); // Create a new graphics layer
         map.add(graphicsLayer); // Add it to the map
 
-        const popupTemplate = {
+        // Define popup templates
+        const popupTemplatePoint = {
             title: "{Name}",
             content: "{Description}"
         };
 
-        const attributes = {
-            Name: "Stevie Ray Vaughan Statue",
-            Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
+        const popupTemplatePolyline = {
+            title: "Polyline",
+            content: "This is a polyline!"
         };
 
-        const point = { //Create a point  
+        const popupTemplatePolygon = {
+            title: "Polygon",
+            content: "This is a polygon!"
+        };
+
+        // Create point graphic
+        const point = {
           type: "point",  
           longitude: -97.750689,    //long lat of Stevie Ray Vaughan Statue
           latitude: 30.263098
-
         };
 
         const simpleMarkerSymbol = {  
           type: "simple-marker",  
+          style: "square",
           color: [0, 0, 139],  // Color of blues rock
           outline: {  
             color: [255, 255, 255], // White  
-            width: 1
+            width: 2
           }  
         };
 
         const pointGraphic = new Graphic({  
           geometry: point,  
           symbol: simpleMarkerSymbol,
-          attributes: attributes,
-          popupTemplate: popupTemplate  
+          attributes: {
+            Name: "Stevie Ray Vaughan Statue",
+            Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
+          },
+          popupTemplate: popupTemplatePoint  
         });
 
         graphicsLayer.add(pointGraphic); // Add the point graphic to the graphics layer
+        
+        
+        //A polyline is drawn from the Stevie Ray Vaughan Statue to an example endpoint.
+        //A polygon is drawn with three example vertices.
 
+        
+        // Create polyline
+        const polyline = {
+          type: "polyline",
+          paths: [
+            [-97.750689, 30.263098], // Stevie Ray Vaughan Statue
+            [-97.744162, 30.268735]  // Example endpoint
+          ]
+        };
+
+        const simpleLineSymbol = {
+          type: "simple-line",
+          color: [226, 119, 40], // Orange color
+          width: 2
+        };
+
+        const polylineGraphic = new Graphic({
+          geometry: new Polyline(polyline),
+          symbol: simpleLineSymbol,
+          popupTemplate: popupTemplatePolyline
+        });
+
+        graphicsLayer.add(polylineGraphic); // Add the polyline graphic to the graphics layer
+
+        // Create polygon
+        const polygon = {
+          type: "polygon",
+          rings: [
+            [-97.744162, 30.268735], // Example vertex 1
+            [-97.741404, 30.266540], // Example vertex 2
+            [-97.747080, 30.264262]  // Example vertex 3
+          ]
+        };
+
+        const simpleFillSymbol = {
+          type: "simple-fill",
+          color: [227, 139, 79, 0.8], // Orange color with transparency
+          outline: {
+            color: [255, 255, 255],
+            width: 1
+          }
+        };
+
+        const polygonGraphic = new Graphic({
+          geometry: new Polygon(polygon),
+          symbol: simpleFillSymbol,
+          popupTemplate: popupTemplatePolygon
+        });
+
+        graphicsLayer.add(polygonGraphic); // Add the polygon graphic to the graphics layer
 
         // Define a pop-up for usaeduLayer
         const popupEduusa = {
           "title": "EDUs",
           "content": "<b>Name:</b> {INSTNM}<br><b>Total Enrollment:</b> {INSTSIZE}<br>"
-        }
-
+        };
 
         const usaeduLayer = new FeatureLayer({
-          
           url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-          
-          //adding the popup here
           outFields: ["INSTNM","INSTSIZE"],
           popupTemplate: popupEduusa
+        });
 
-          
-
-          }); 
-        
-        
-        
         map.add(usaeduLayer);
 
     });
@@ -116,7 +176,7 @@
 </head>
 <body>
 
-  <!-- the div to displays the map  -->
+  <!-- the div to display the map  -->
   <div id="viewDiv"></div>
 
 </body>
