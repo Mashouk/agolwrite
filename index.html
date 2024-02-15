@@ -47,17 +47,17 @@
         // Define popup templates
         const popupTemplatePoint = {
             title: "{Name}",
-            content: "{Description}"
+            content: "<b>Description:</b> {Description}<br><b>Website:</b> <a href='{Website}' target='_blank'>{Website}</a><br>"
         };
 
         const popupTemplatePolyline = {
             title: "Polyline",
-            content: "This is a polyline!"
+            content: "<b>Length:</b> {Length} meters"
         };
 
         const popupTemplatePolygon = {
             title: "Polygon",
-            content: "This is a polygon!"
+            content: "<b>Area:</b> {Area} square meters"
         };
 
         // Create point graphic
@@ -82,18 +82,14 @@
           symbol: simpleMarkerSymbol,
           attributes: {
             Name: "Stevie Ray Vaughan Statue",
-            Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick"
+            Description: "A bronze sculpture of Stevie Ray Vaughan by Ralph Helmick",
+            Website: "https://example.com"
           },
           popupTemplate: popupTemplatePoint  
         });
 
         graphicsLayer.add(pointGraphic); // Add the point graphic to the graphics layer
-        
-        
-        //A polyline is drawn from the Stevie Ray Vaughan Statue to an example endpoint.
-        //A polygon is drawn with three example vertices.
 
-        
         // Create polyline
         const polyline = {
           type: "polyline",
@@ -112,6 +108,9 @@
         const polylineGraphic = new Graphic({
           geometry: new Polyline(polyline),
           symbol: simpleLineSymbol,
+          attributes: {
+            Length: 300 // Example length in meters
+          },
           popupTemplate: popupTemplatePolyline
         });
 
@@ -139,6 +138,9 @@
         const polygonGraphic = new Graphic({
           geometry: new Polygon(polygon),
           symbol: simpleFillSymbol,
+          attributes: {
+            Area: 500 // Example area in square meters
+          },
           popupTemplate: popupTemplatePolygon
         });
 
@@ -156,6 +158,31 @@
           popupTemplate: popupEduusa
         });
 
+
+
+        const airportRenderer = {
+        "type": "simple",
+        "symbol": {
+          "type": "picture-marker",
+          "url": "https://github.com/Mashouk/agol3/blob/main/helicopter-heliport-icon-2048x2048-lbz9lu9d.png",
+          "width": "18px",
+          "height": "18px"
+        }
+      }
+
+
+
+      const airportLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_Airports29/FeatureServer",
+          renderer: airportRenderer
+        });
+
+
+
+
+
+
+        map.add(airportLayer);
         map.add(usaeduLayer);
 
     });
