@@ -25,8 +25,12 @@
       "esri/geometry/Polygon",
       "esri/symbols/SimpleFillSymbol",
       "esri/symbols/SimpleLineSymbol",
-      "esri/symbols/SimpleMarkerSymbol"
-    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Polyline, Polygon, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol) {
+      "esri/symbols/SimpleMarkerSymbol",
+      
+
+      //adding editor widget
+      "esri/widgets/Editor"
+    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Polyline, Polygon, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol, Editor) {
 
       esriConfig.apiKey = "AAPK9c576cbd3a844e7791c0d5901d6d1b876W9Kwr0mfce5WFBsw3WmfabQ1sD8IBrqASyYAbSi22UUfDN4txoxY5y-bIM1jVhR";
       const map = new Map({
@@ -203,6 +207,25 @@
 
         map.add(airportLayer);
         map.add(usaeduLayer);
+
+
+        //adding the const for the feature layer
+        const myAirports = new FeatureLayer({
+        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airpor/FeatureServer",
+        
+        //adding the popup here
+        outFields: ["AirportCode"],
+
+        });
+
+        //adding the feature layer to the map
+        map.add(myAirports);
+
+
+
+
+
+
 
     });
   </script>
