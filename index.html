@@ -1,4 +1,4 @@
-<!DOTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Hello, I am writing to AGOL!</title>
@@ -26,10 +26,12 @@
       "esri/layers/FeatureLayer",
 
       //adding editor widget
-      "esri/widgets/Editor"
+      "esri/widgets/Editor",
 
-    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor) {
 
+      // adding legend widget
+      "esri/widgets/Legend"
+    ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend) {
       esriConfig.apiKey = "AAPK9c576cbd3a844e7791c0d5901d6d1b876W9Kwr0mfce5WFBsw3WmfabQ1sD8IBrqASyYAbSi22UUfDN4txoxY5y-bIM1jVhR";
       const map = new Map({
         basemap: "arcgis-topographic" // Basemap layer
@@ -94,7 +96,7 @@
 
          //adding the const for the feature layer
          const usaeduLayer = new FeatureLayer({
-          url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
+          url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_Airports29/FeatureServer",
 
           //adding the popup here
           outFields: ["INSTNM","INSTSIZE"],
@@ -138,9 +140,6 @@
         }
       };
 
-
-
-
         const airportLayer = new FeatureLayer({
           url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
           renderer: airportRenderer,  //calling the icon
@@ -154,7 +153,19 @@
 
         //adding the feature layer to the map
         map.add(airportLayer);
-   
+
+
+        //adding the const for the feature layer
+        const myAirports = new FeatureLayer({
+        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airport/FeatureServer",
+        
+        //adding the popup here
+        outFields: ["AirportCode"],
+
+        });
+
+        //adding the feature layer to the map
+        map.add(myAirports);
 
         //adding the editor widget
        // Set the point layer's LayerInfo
@@ -170,6 +181,28 @@
 
         // Add the widget to the view
         view.ui.add(editor, "top-right");
+
+
+
+        // Add legend widget
+          const legend = new Legend({
+            view: view,
+            layerInfos: [
+              {
+                layer: usaeduLayer,
+                title: "Education Institutions" // Title for the legend entry
+              },
+              {
+               layer: airportLayer,
+                title: "Airports" // Title for the legend entry
+              }
+            ]
+        });
+
+        // Add the legend to the view
+        view.ui.add(legend, "bottom-left");
+
+
 
 
     });
@@ -194,4 +227,4 @@
   <div id="viewDiv"></div>
 
 </body>
-</html>C
+</html>
