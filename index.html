@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOTYPE html>
 <html lang="en">
 <head>
   <title>Hello, I am writing to AGOL!</title>
@@ -134,9 +134,12 @@
 
         labelPlacement: "above-center",
         labelExpressionInfo: {
-          expression: "$feature.Fac_Name"
+          expression: "$feature.Loc_Id"
         }
       };
+
+
+
 
         const airportLayer = new FeatureLayer({
           url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
@@ -151,19 +154,7 @@
 
         //adding the feature layer to the map
         map.add(airportLayer);
-
-
-        //adding the const for the feature layer
-        const myAirports = new FeatureLayer({
-        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airport/FeatureServer",
-        
-        //adding the popup here
-        outFields: ["AirportCode"],
-
-        });
-
-        //adding the feature layer to the map
-        map.add(myAirports);
+   
 
         //adding the editor widget
        // Set the point layer's LayerInfo
@@ -203,4 +194,4 @@
   <div id="viewDiv"></div>
 
 </body>
-</html>
+</html>C
